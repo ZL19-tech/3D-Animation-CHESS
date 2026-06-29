@@ -74,6 +74,22 @@
 
         const TOTAL_FRAMES = 150;
         let currentFrameIndex = 0;
+        const frameCache = {};
+        let isLoading = false;
+
+        // Preload all frames in background
+        function preloadFrames() {
+            console.log('Starting preload...');
+            for (let i = 0; i < TOTAL_FRAMES; i++) {
+                const img = new Image();
+                const frameFile = `frame_${i.toString().padStart(5, '0')}.webp`;
+                img.src = frameFile;
+                frameCache[i] = frameFile;
+            }
+        }
+
+        // Start preloading immediately
+        preloadFrames();
 
         // Download button
         downloadBtn.addEventListener('click', () => {
@@ -83,18 +99,19 @@
             link.click();
         });
 
-        // Scroll handler
+        // Optimized scroll handler - no lag
+        let lastFrameIndex = -1;
         window.addEventListener('scroll', () => {
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollRatio = Math.min(window.scrollY / scrollHeight, 1);
             const frameIndex = Math.floor(scrollRatio * (TOTAL_FRAMES - 1));
 
-            if (frameIndex !== currentFrameIndex && frameIndex >= 0 && frameIndex < TOTAL_FRAMES) {
-                currentFrameIndex = frameIndex;
-                const frameFile = `frame_${frameIndex.toString().padStart(5, '0')}.webp`;
-                videoFrame.src = frameFile;
+            // Only update if frame changed
+            if (frameIndex !== lastFrameIndex) {
+                lastFrameIndex = frameIndex;
+                videoFrame.src = frameCache[frameIndex];
             }
-        });
+        }, { passive: true });
     </script>
 </body>
 </html>
