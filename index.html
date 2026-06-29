@@ -63,7 +63,7 @@
 </head>
 <body>
     <div class="video-container">
-        <img id="videoFrame" src="frame_00000.png" alt="Animation">
+        <img id="videoFrame" src="frame_00000.webp" alt="Animation">
     </div>
 
     <button class="download-btn" id="downloadBtn">⬇️ Salvează Frame</button>
@@ -79,7 +79,7 @@
         downloadBtn.addEventListener('click', () => {
             const link = document.createElement('a');
             link.href = videoFrame.src;
-            link.download = `chess-frame-${currentFrameIndex}.png`;
+            link.download = `chess-frame-${currentFrameIndex}.webp`;
             link.click();
         });
 
@@ -91,7 +91,7 @@
 
             if (frameIndex !== currentFrameIndex && frameIndex >= 0 && frameIndex < TOTAL_FRAMES) {
                 currentFrameIndex = frameIndex;
-                const frameFile = `frame_${frameIndex.toString().padStart(5, '0')}.png`;
+                const frameFile = `frame_${frameIndex.toString().padStart(5, '0')}.webp`;
                 videoFrame.src = frameFile;
             }
         });
